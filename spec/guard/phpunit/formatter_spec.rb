@@ -42,7 +42,7 @@ describe Guard::PHPUnit::Formatter do
       it 'returns a hash containing the tests result' do
         output = load_phpunit_output('mixed') 
         subject.parse_output(output).should == {
-          :tests  => 9, :failures => 3,
+          :tests  => 13, :failures => 3,
           :errors => 1, :pending  => 3,
           :duration => 2
         }

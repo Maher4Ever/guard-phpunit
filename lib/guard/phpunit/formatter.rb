@@ -28,7 +28,7 @@ module Guard
           strings_list = Array(strings_list)
           strings_list.each do |s|
             text =~ %r{
-              (\d)+   # count of what we are looking for 
+              (\d+)   # count of what we are looking for 
               [ ]     # then a space
               #{s}s?  # then the string 
               .*      # then whatever

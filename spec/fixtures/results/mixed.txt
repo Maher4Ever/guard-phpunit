@@ -1,4 +1,4 @@
-..SSFFEIF
+......SSFFEIF
 
 Errors:
 
@@ -23,4 +23,4 @@ Failures:
      No tests found in class "emptyTest".
 
 Finished in 2 seconds
-9 tests, 4 assertions, 3 failures, 1 errors, 1 incomplete, 2 skipped
+13 tests, 4 assertions, 3 failures, 1 errors, 1 incomplete, 2 skipped
