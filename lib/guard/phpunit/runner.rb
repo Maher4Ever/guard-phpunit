@@ -14,6 +14,8 @@ module Guard
 
           notify_start(paths, options)
           output  = run_tests(paths, options)
+          
+          print_output output
 
           # return false in case the system call fail with no status!
           return false if $?.nil?
@@ -42,13 +44,17 @@ module Guard
         def run_tests(paths, options)
           if paths.length == 1
             tests_path = paths.first
-            output = system(phpunit_command(tests_path, options))
+            output = execute_command phpunit_command(tests_path, options)
           else
             create_tests_folder_for(paths) do |tests_folder|
-              output = system(phpunit_command(tests_folder, options))
+              output = execute_command phpunit_command(tests_folder, options)
             end
           end
           output
+        end
+
+        def print_output(output)
+          UI.info output
         end
 
         def notify_results(output, options)
@@ -91,6 +97,10 @@ module Guard
           cmd_parts << path
 
           cmd_parts.join(' ')
+        end
+
+        def execute_command(command)
+          %x{#{command}}
         end
       end
     end

@@ -10,7 +10,7 @@ describe Guard::PHPUnit::Runner do
       FileUtils.stub(:ln_s)
       FileUtils.stub(:mkdir_p)
       
-      subject.stub(:system)
+      subject.stub(:execute_command)
       formatter.stub(:notify)
       
       system("`exit 0`") # prime the $? variable
@@ -23,20 +23,29 @@ describe Guard::PHPUnit::Runner do
     end
 
     shared_examples_for 'paths list not empty' do
+      it 'notifies about running the tests' do
+        subject.should_receive(:notify_start).with( ['tests'], anything )
+        subject.run( ['tests'] )
+      end
+
+      it 'runs phpunit tests' do
+        formatter_path = @project_path.join('lib', 'guard', 'phpunit', 'formatters', 'PHPUnit-Progress')
+        subject.should_receive(:execute_command).with(
+          %r{^phpunit --include-path #{formatter_path} --printer PHPUnit_Extensions_Progress_ResultPrinter .+$}
+        ).and_return(true)
+        subject.run( ['tests'] )
+      end
+
+      it 'prints the tests output to the console' do
+          output = load_phpunit_output('passing')
+          subject.stub(:run_tests).and_return(output) 
+
+          subject.should_receive(:print_output).with(output)
+          
+          subject.run( ['tests'] )
+      end
+
       context 'when PHPUnit executes the tests' do
-        it 'notifies about running the tests' do
-          subject.should_receive(:notify_start).with( ['tests'], anything )
-          subject.run( ['tests'] )
-        end
-
-        it 'runs phpunit tests' do
-          formatter_path = @project_path.join('lib', 'guard', 'phpunit', 'formatters', 'PHPUnit-Progress')
-          subject.should_receive(:system).with(
-            %r{^phpunit --include-path #{formatter_path} --printer PHPUnit_Extensions_Progress_ResultPrinter .+$}
-          ).and_return(true)
-          subject.run( ['tests'] )
-        end
-
         it 'parses the tests output' do
           output = load_phpunit_output('passing')
           subject.stub(:run_tests).and_return(output)
@@ -64,7 +73,7 @@ describe Guard::PHPUnit::Runner do
         end
 
         it 'does not notify about failures' do
-          subject.should_receive(:system).and_return(nil)
+          subject.should_receive(:execute_command)
           subject.should_not_receive(:notify_failure)
           subject.run( ['tests'] )
         end
@@ -77,7 +86,7 @@ describe Guard::PHPUnit::Runner do
         end
 
         it 'notifies about the failure' do
-          subject.should_receive(:system).and_return(nil)
+          subject.should_receive(:execute_command)
           subject.should_receive(:notify_failure)
           subject.run( ['tests'] )
         end
@@ -92,7 +101,7 @@ describe Guard::PHPUnit::Runner do
         describe ':cli' do
           it 'runs with CLI options passed to PHPUnit' do
             cli_options = '--colors --verbose'
-            subject.should_receive(:system).with(
+            subject.should_receive(:execute_command).with(
               %r{^phpunit .+ #{cli_options} .+$}
             ).and_return(true)
             subject.run( ['tests'], :cli => cli_options )
@@ -130,7 +139,5 @@ describe Guard::PHPUnit::Runner do
         subject.run( ['spec/fixtures/sampleTest.php', 'spec/fixtures/fullTest.php'] )
       end
     end
-
   end
-
 end
