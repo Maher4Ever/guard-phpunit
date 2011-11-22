@@ -6,6 +6,8 @@ module Guard
     module Runner
       class << self
 
+        PHPUNIT_ERRORS_EXITCODE = 2
+
         def run(paths, options = {})
           paths = Array(paths)
           return false if paths.empty?
@@ -16,7 +18,7 @@ module Guard
           # return false in case the system call fail with no status!
           return false if $?.nil?
 
-          if $?.success?
+          if $?.success? or tests_contain_errors?
             notify_results(output, options)
           else
             notify_failure(options) 
@@ -58,6 +60,10 @@ module Guard
         def notify_failure(options)
           return if options[:notification] == false
           ::Guard::Notifier.notify('Failed! Check the console', :title => 'PHPUnit results', :image => :failed)
+        end
+
+        def tests_contain_errors?
+          $?.exitstatus == PHPUNIT_ERRORS_EXITCODE
         end
 
         def create_tests_folder_for(paths)

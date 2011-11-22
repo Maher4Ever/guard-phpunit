@@ -54,6 +54,15 @@ describe Guard::PHPUnit::Runner do
           subject.run( ['tests'] )
         end
 
+        it 'notifies about the tests output even when they contain errors' do
+          system("`exit 2`") # prime the $? variable
+          output = load_phpunit_output('errors')
+          subject.stub(:run_tests).and_return(output)
+          subject.should_receive(:notify_results).with(output, anything())
+
+          subject.run( ['tests'] )
+        end
+
         it 'does not notify about failures' do
           subject.should_receive(:system).and_return(nil)
           subject.should_not_receive(:notify_failure)

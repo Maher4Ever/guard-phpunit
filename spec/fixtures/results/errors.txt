@@ -1,0 +1,11 @@
+E
+
+Errors:
+
+  1) NumberTest::testMathStillWorks
+     NumberException: Division by zero!
+     # /home/maher/Projects/php/PHPUnit-Progress/Tests/_files/Number.php:61
+     # /home/maher/Projects/php/PHPUnit-Progress/Tests/_files/NumberTest.php:81
+
+Finished in 0 seconds
+1 test, 0 assertions, 1 errors
