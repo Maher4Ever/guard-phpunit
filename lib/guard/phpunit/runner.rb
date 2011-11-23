@@ -101,7 +101,7 @@ module Guard
         # Checks the exitstatus of the phpunit command
         # for a sign of errors in the tests.
         #
-        # @retutn [Boolean] whether the tests contain errors or not
+        # @return [Boolean] whether the tests contain errors or not
         #
         def tests_contain_errors?
           $?.exitstatus == PHPUNIT_ERRORS_EXITCODE
