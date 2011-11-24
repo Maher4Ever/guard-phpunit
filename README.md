@@ -61,11 +61,11 @@ The following options can be passed to Guard::PHPUnit:
 :all_on_start => false        # Run all tests on startup.
                               # default: true
 
-:tests_path                   # Relative path to the tests directory. This path
+:tests_path => 'tests'        # Relative path to the tests directory. This path
                               # is used when running all the tests.
                               # default: the current working directory (pwd)
 
-:cli                          # The options passed to the phpunit command
+:cli => '--colors'            # The options passed to the phpunit command
                               # when running the tests.
                               # default: nil
 ```
