@@ -63,6 +63,15 @@ describe Guard::PHPUnit::Runner do
           subject.run( ['tests'] )
         end
 
+        it 'notifies about the tests output even when they contain failures' do
+          system("`exit 1`") # prime the $? variable
+          output = load_phpunit_output('failing')
+          subject.stub(:run_tests).and_return(output)
+          subject.should_receive(:notify_results).with(output, anything())
+
+          subject.run( ['tests'] )
+        end
+
         it 'notifies about the tests output even when they contain errors' do
           system("`exit 2`") # prime the $? variable
           output = load_phpunit_output('errors')
@@ -81,7 +90,7 @@ describe Guard::PHPUnit::Runner do
 
       context 'when PHPUnit fails to execute' do
         before do
-          system("`exit 1`") # prime the $? variable
+          system("`exit 255`") # prime the $? variable
           notifier.stub(:notify)
         end
 
