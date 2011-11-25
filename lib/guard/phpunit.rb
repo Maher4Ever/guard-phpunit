@@ -57,7 +57,7 @@ module Guard
     # @raise (see #start)
     #
     def run_on_change(paths)
-      success = Runner.run(paths, options)
+      success = Runner.run(Inspector.clean(paths), options)
       throw :task_has_failed unless success
     end
   end

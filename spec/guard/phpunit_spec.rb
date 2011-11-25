@@ -78,6 +78,16 @@ describe Guard::PHPUnit do
   end
 
   describe '#run_on_change' do
+    before do
+      inspector.stub(:clean).and_return { |paths| paths }
+    end
+
+    it 'cleans the changed paths before running the tests' do
+      runner.stub(:run).and_return(true)
+      inspector.should_receive(:clean).with(['tests/firstTest.php', 'tests/secondTest.php'])
+      subject.run_on_change ['tests/firstTest.php', 'tests/secondTest.php']
+    end
+
     it 'runs the changed tests' do
       runner.should_receive(:run).with(['tests/firstTest.php', 'tests/secondTest.php'], anything).and_return(true)
       subject.run_on_change ['tests/firstTest.php', 'tests/secondTest.php']
