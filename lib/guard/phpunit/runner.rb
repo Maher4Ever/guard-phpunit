@@ -28,6 +28,7 @@ module Guard
         def run(paths, options = {})
           paths = Array(paths)
           return false if paths.empty?
+          return false unless phpunit_exists?
 
           notify_start(paths, options)
           output  = run_tests(paths, options)
@@ -47,6 +48,19 @@ module Guard
         end
 
         private
+
+        # Checks that phpunit is installed on the user's
+        # machine.
+        #
+        # @return [Boolean] The status of phpunit
+        #
+        def phpunit_exists?
+          exists = system('which phpunit')
+          unless exists
+            UI.error('phpunit is not installed on your machine.', :reset => true)
+          end
+          exists
+        end
 
         # Displays the start testing notification.
         #

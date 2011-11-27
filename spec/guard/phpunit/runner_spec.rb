@@ -4,6 +4,7 @@ describe Guard::PHPUnit::Runner do
 
   let(:formatter) { Guard::PHPUnit::Formatter }
   let(:notifier)  { Guard::Notifier           }
+  let(:ui)        { Guard::UI                 }
 
   describe '#run' do
     before do
@@ -11,6 +12,7 @@ describe Guard::PHPUnit::Runner do
       FileUtils.stub(:mkdir_p)
       
       subject.stub(:execute_command)
+      subject.stub(:phpunit_exists?).and_return(true)
       formatter.stub(:notify)
       
       system("`exit 0`") # prime the $? variable
@@ -23,6 +25,19 @@ describe Guard::PHPUnit::Runner do
     end
 
     shared_examples_for 'paths list not empty' do
+      it 'checks that phpunit is installed' do
+        subject.should_receive(:phpunit_exists?)
+        subject.run( ['tests'] )
+      end
+
+      it 'displays an error when phpunit is not installed' do
+        subject.unstub(:phpunit_exists?)
+        subject.stub(:system).and_return(false)
+        ui.should_receive(:error).with('phpunit is not installed on your machine.', anything)
+
+        subject.run( ['tests'] )
+      end
+
       it 'notifies about running the tests' do
         subject.should_receive(:notify_start).with( ['tests'], anything )
         subject.run( ['tests'] )
