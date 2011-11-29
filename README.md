@@ -4,7 +4,7 @@ Guard::PHPUnit [![Build Status](https://secure.travis-ci.org/Maher4Ever/guard-ph
 PHPUnit guard allows to automatically & intelligently launch tests when files
 are modified.
 
-Tested on MRI Ruby 1.8.7, 1.9.2 and 1.9.3.
+Tested on MRI Ruby (1.8.7, 1.9.2, 1.9.3), REE and Rubinius.
 
 Install
 -------
