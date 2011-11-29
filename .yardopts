@@ -1,0 +1,8 @@
+--readme           README.md
+--markup           markdown
+--markup-provider  redcarpet
+--title            'Guard::PHPUnit Documentation'
+--hide-void-return
+--protected
+--private
+lib/**/*.rb
