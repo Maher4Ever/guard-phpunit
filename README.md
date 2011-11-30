@@ -61,6 +61,15 @@ The following options can be passed to Guard::PHPUnit:
 :all_on_start => false        # Run all tests on startup.
                               # default: true
 
+:all_after_pass => false      # Run all tests after changed tests pass. This ensures
+                              # that the process of making changed tests pass didn't
+                              # break something else.
+                              # default: true
+
+:keep_failed => false         # Remember failed tests and keep running them with
+                              # each change until they pass.
+                              # default: true
+
 :tests_path => 'tests'        # Relative path to the tests directory. This path
                               # is used when running all the tests.
                               # default: the current working directory (pwd)
