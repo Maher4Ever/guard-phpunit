@@ -12,6 +12,10 @@ describe Guard::PHPUnit do
         subject.options[:all_on_start].should be_true
       end
 
+      it 'sets a default :keep_failed option' do
+        subject.options[:keep_failed].should be_true
+      end
+
       it 'sets a default :tests_path option' do
         subject.options[:tests_path].should == @project_path.to_s
       end
@@ -20,11 +24,16 @@ describe Guard::PHPUnit do
     context 'when other options are provided' do
 
       subject { Guard::PHPUnit.new(nil, { :all_on_start => false,
+                                          :keep_failed  => false,
                                           :cli          => '--colors',
                                           :tests_path   => 'tests'     }) }
 
       it 'sets :all_on_start with the provided option' do
         subject.options[:all_on_start].should be_false
+      end
+
+      it 'sets :keep_failed with the provided option' do
+        subject.options[:keep_failed].should be_false
       end
 
       it 'sets :cli with the provided option' do
