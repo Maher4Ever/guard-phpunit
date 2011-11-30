@@ -12,6 +12,10 @@ describe Guard::PHPUnit do
         subject.options[:all_on_start].should be_true
       end
 
+      it 'sets a default :all_after_pass option' do
+        subject.options[:all_after_pass].should be_true
+      end
+
       it 'sets a default :keep_failed option' do
         subject.options[:keep_failed].should be_true
       end
@@ -23,13 +27,18 @@ describe Guard::PHPUnit do
 
     context 'when other options are provided' do
 
-      subject { Guard::PHPUnit.new(nil, { :all_on_start => false,
-                                          :keep_failed  => false,
-                                          :cli          => '--colors',
-                                          :tests_path   => 'tests'     }) }
+      subject { Guard::PHPUnit.new(nil, { :all_on_start   => false,
+                                          :all_after_pass => false,
+                                          :keep_failed    => false,
+                                          :cli            => '--colors',
+                                          :tests_path     => 'tests'     }) }
 
       it 'sets :all_on_start with the provided option' do
         subject.options[:all_on_start].should be_false
+      end
+
+      it 'sets :all_after_pass with the provided option' do
+        subject.options[:all_after_pass].should be_false
       end
 
       it 'sets :keep_failed with the provided option' do
@@ -115,9 +124,10 @@ describe Guard::PHPUnit do
     context 'when tests fail' do
       before do
         runner.stub(:run).and_return(false)
+        subject.stub(:run_all).and_return(true)
       end
 
-      context 'with the :keep_failed option is set to true' do
+      context 'with the :keep_failed option set to true' do
         it 'runs the next changed files plus the failed tests' do
           expect { subject.run_on_change ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
           runner.should_receive(:run).with(
@@ -128,7 +138,7 @@ describe Guard::PHPUnit do
         end
       end
 
-      context 'with the :keep_failed option is set to false' do
+      context 'with the :keep_failed option set to false' do
         subject { Guard::PHPUnit.new(nil, :keep_failed => false) }
 
         it 'runs the next changed files normally without the failed tests' do
@@ -138,6 +148,42 @@ describe Guard::PHPUnit do
           ).and_return(true)
 
           subject.run_on_change ['tests/secondTest.php']
+        end
+      end
+    end
+
+    context 'when tests fail then pass' do
+      before do
+        runner.stub(:run).and_return(false, true)
+      end
+
+      context 'with the :all_after_pass option set to true' do
+        it 'calls #run_all' do
+          subject.should_receive(:run_all)
+          expect { subject.run_on_change ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
+          subject.run_on_change ['tests/firstTest.php']
+        end
+        
+        it 'calls #run_all (2)' do
+          expect { subject.run_all }.to throw_symbol :task_has_failed
+          subject.should_receive(:run_all)
+          subject.run_on_change ['tests/firstTest.php']
+        end
+      end
+      
+      context 'with the :all_after_pass option set to false' do
+        subject { Guard::PHPUnit.new(nil, :all_after_pass => false) }
+
+        it 'does not call #run_all' do
+          subject.should_not_receive(:run_all)
+          expect { subject.run_on_change ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
+          subject.run_on_change ['tests/firstTest.php']
+        end
+
+        it 'does not call #run_all (2)' do
+          expect { subject.run_all }.to throw_symbol :task_has_failed
+          subject.should_not_receive(:run_all)
+          subject.run_on_change ['tests/firstTest.php']
         end
       end
     end

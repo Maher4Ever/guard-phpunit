@@ -14,10 +14,11 @@ module Guard
     autoload :Runner,    'guard/phpunit/runner'
 
     DEFAULT_OPTIONS = {
-      :all_on_start => true,
-      :keep_failed  => true,
-      :cli          => nil,
-      :tests_path   => Dir.pwd
+      :all_on_start   => true,
+      :all_after_pass => true,
+      :keep_failed    => true,
+      :cli            => nil,
+      :tests_path     => Dir.pwd
     }
 
     # Initialize Guard::PHPUnit.
@@ -33,7 +34,8 @@ module Guard
       @options = defaults.merge(options)
       super(watchers, @options)
 
-      @failed_paths = []
+      @failed_paths     = []
+      @previous_failed = false
 
       Inspector.tests_path = @options[:tests_path]
     end
@@ -54,6 +56,8 @@ module Guard
       success = Runner.run(options[:tests_path], options.merge(
         :message => 'Running all tests'
       ))
+
+      @previous_failed = !success
       throw :task_has_failed unless success
     end
 
@@ -66,13 +70,41 @@ module Guard
       paths = Inspector.clean(paths + @failed_paths)
       success = Runner.run(paths, options)
 
-      if success 
-        @failed_paths -= paths if @options[:keep_failed]
-      else
-        @failed_paths += paths if @options[:keep_failed]
-      end
-
+      update_failed_paths(success, paths)
+      run_all_after_pass(success)
       throw :task_has_failed unless success
+    end
+
+    private
+
+    # Adds or removes path to the failed_paths bassed
+    # on the tests result.
+    #
+    # @param [Boolean] tests_passed whether the tests passed or not
+    # @param [Array<String>] paths the tests paths
+    #
+    def update_failed_paths(tests_passed, paths)
+      return unless @options[:keep_failed]
+
+      if tests_passed
+        @failed_paths -= paths
+      else
+        @failed_paths += paths 
+      end
+    end
+
+    # Runs all tests after the failed tests pass.
+    #
+    # @param (see .update_failed_paths)
+    #
+    def run_all_after_pass(tests_passed)
+      return unless @options[:all_after_pass]
+
+      if tests_passed
+        run_all if @previous_failed
+      else
+        @previous_failed = true
+      end
     end
   end
 end
