@@ -10,6 +10,7 @@ module Guard
 
     autoload :Inspector, 'guard/phpunit/inspector'
     autoload :Formatter, 'guard/phpunit/formatter'
+    autoload :Notifier,  'guard/phpunit/notifier'
     autoload :Runner,    'guard/phpunit/runner'
 
     DEFAULT_OPTIONS = {

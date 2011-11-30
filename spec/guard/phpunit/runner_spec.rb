@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Guard::PHPUnit::Runner do
 
   let(:formatter) { Guard::PHPUnit::Formatter }
-  let(:notifier)  { Guard::Notifier           }
+  let(:notifier)  { Guard::PHPUnit::Notifier  }
   let(:ui)        { Guard::UI                 }
 
   describe '#run' do
@@ -13,7 +13,7 @@ describe Guard::PHPUnit::Runner do
       
       subject.stub(:execute_command)
       subject.stub(:phpunit_exists?).and_return(true)
-      formatter.stub(:notify)
+      notifier.stub(:notify_results)
       
       system("`exit 0`") # prime the $? variable
     end

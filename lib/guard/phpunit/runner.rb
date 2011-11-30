@@ -106,7 +106,7 @@ module Guard
         def notify_results(output, options)
           return if options[:notification] == false
           results = Formatter.parse_output(output)
-          Formatter.notify(results)
+          Notifier.notify_results(results)
         end
 
         # Displays a notification about failing to run the tests
@@ -115,7 +115,7 @@ module Guard
         #
         def notify_failure(options)
           return if options[:notification] == false
-          ::Guard::Notifier.notify('Failed! Check the console', :title => 'PHPUnit results', :image => :failed)
+          Notifier.notify('Failed! Check the console', :title => 'PHPUnit results', :image => :failed)
         end
         
         # Checks the exitstatus of the phpunit command
