@@ -102,5 +102,35 @@ describe Guard::PHPUnit do
       runner.should_receive(:run).with(anything, hash_including(defaults)).and_return(true)
       subject.run_on_change ['tests/firstTest.php', 'tests/secondTest.php']
     end
+    
+    context 'when tests fail' do
+      before do
+        runner.stub(:run).and_return(false)
+      end
+
+      context 'with the :keep_failed option is set to true' do
+        it 'runs the next changed files plus the failed tests' do
+          expect { subject.run_on_change ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
+          runner.should_receive(:run).with(
+            ['tests/secondTest.php', 'tests/firstTest.php'], anything
+          ).and_return(true)
+
+          subject.run_on_change ['tests/secondTest.php']
+        end
+      end
+
+      context 'with the :keep_failed option is set to false' do
+        subject { Guard::PHPUnit.new(nil, :keep_failed => false) }
+
+        it 'runs the next changed files normally without the failed tests' do
+          expect { subject.run_on_change ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
+          runner.should_receive(:run).with(
+            ['tests/secondTest.php'], anything
+          ).and_return(true)
+
+          subject.run_on_change ['tests/secondTest.php']
+        end
+      end
+    end
   end
 end

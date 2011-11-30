@@ -15,6 +15,8 @@ module Guard
 
     DEFAULT_OPTIONS = {
       :all_on_start => true,
+      :keep_failed  => true,
+      :cli          => nil,
       :tests_path   => Dir.pwd
     }
 
@@ -30,6 +32,9 @@ module Guard
       defaults = DEFAULT_OPTIONS.clone
       @options = defaults.merge(options)
       super(watchers, @options)
+
+      @failed_paths = []
+
       Inspector.tests_path = @options[:tests_path]
     end
 
@@ -58,7 +63,15 @@ module Guard
     # @raise (see #start)
     #
     def run_on_change(paths)
-      success = Runner.run(Inspector.clean(paths), options)
+      paths = Inspector.clean(paths + @failed_paths)
+      success = Runner.run(paths, options)
+
+      if success 
+        @failed_paths -= paths if @options[:keep_failed]
+      else
+        @failed_paths += paths if @options[:keep_failed]
+      end
+
       throw :task_has_failed unless success
     end
   end
