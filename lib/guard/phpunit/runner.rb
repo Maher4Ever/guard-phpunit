@@ -46,7 +46,7 @@ module Guard
         # @return [Boolean] The status of phpunit
         #
         def phpunit_exists?
-          system('which phpunit')
+          system('which phpunit > /dev/null 2>&1')
         end
 
         # Executes the testing command on the tests 
