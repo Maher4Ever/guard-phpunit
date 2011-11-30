@@ -53,9 +53,10 @@ describe Guard::PHPUnit::Runner do
 
       it 'prints the tests output to the console' do
           output = load_phpunit_output('passing')
-          subject.stub(:run_tests).and_return(output) 
-
-          subject.should_receive(:print_output).with(output)
+          subject.stub(:notify_start)
+          subject.stub(:execute_command).and_return(output) 
+          
+          ui.should_receive(:info).with(output)
           
           subject.run( ['tests'] )
       end
@@ -63,7 +64,7 @@ describe Guard::PHPUnit::Runner do
       context 'when PHPUnit executes the tests' do
         it 'parses the tests output' do
           output = load_phpunit_output('passing')
-          subject.stub(:run_tests).and_return(output)
+          subject.stub(:execute_command).and_return(output)
           
           formatter.should_receive(:parse_output).with(output)
 
@@ -72,7 +73,7 @@ describe Guard::PHPUnit::Runner do
 
         it 'notifies about the tests output' do
           output = load_phpunit_output('passing')
-          subject.stub(:run_tests).and_return(output)
+          subject.stub(:execute_command).and_return(output)
           subject.should_receive(:notify_results).with(output, anything())
 
           subject.run( ['tests'] )
@@ -81,7 +82,7 @@ describe Guard::PHPUnit::Runner do
         it 'notifies about the tests output even when they contain failures' do
           system("`exit 1`") # prime the $? variable
           output = load_phpunit_output('failing')
-          subject.stub(:run_tests).and_return(output)
+          subject.stub(:execute_command).and_return(output)
           subject.should_receive(:notify_results).with(output, anything())
 
           subject.run( ['tests'] )
@@ -90,7 +91,7 @@ describe Guard::PHPUnit::Runner do
         it 'notifies about the tests output even when they contain errors' do
           system("`exit 2`") # prime the $? variable
           output = load_phpunit_output('errors')
-          subject.stub(:run_tests).and_return(output)
+          subject.stub(:execute_command).and_return(output)
           subject.should_receive(:notify_results).with(output, anything())
 
           subject.run( ['tests'] )

@@ -27,13 +27,49 @@ module Guard
         #
         def run(paths, options = {})
           paths = Array(paths)
+          
           return false if paths.empty?
-          return false unless phpunit_exists?
+          
+          unless phpunit_exists?
+            UI.error('phpunit is not installed on your machine.', :reset => true)
+            return false
+          end
+
+          run_tests(paths, options)
+        end
+
+        private
+
+        # Checks that phpunit is installed on the user's
+        # machine.
+        #
+        # @return [Boolean] The status of phpunit
+        #
+        def phpunit_exists?
+          system('which phpunit')
+        end
+
+        # Executes the testing command on the tests 
+        # and returns the status of this process.
+        #
+        # @param (see #run)
+        # @param (see #run)
+        #
+        def run_tests(paths, options)
 
           notify_start(paths, options)
-          output  = run_tests(paths, options)
-          
-          print_output output
+
+          if paths.length == 1
+            tests_path = paths.first
+            output = execute_command phpunit_command(tests_path, options)
+          else
+            create_tests_folder_for(paths) do |tests_folder|
+              output = execute_command phpunit_command(tests_folder, options)
+            end
+          end
+
+          # print the output to the terminal
+          UI.info output
 
           # return false in case the system call fails with no status!
           return false if $?.nil?
@@ -47,21 +83,6 @@ module Guard
           $?.success?
         end
 
-        private
-
-        # Checks that phpunit is installed on the user's
-        # machine.
-        #
-        # @return [Boolean] The status of phpunit
-        #
-        def phpunit_exists?
-          exists = system('which phpunit')
-          unless exists
-            UI.error('phpunit is not installed on your machine.', :reset => true)
-          end
-          exists
-        end
-
         # Displays the start testing notification.
         #
         # @param (see #run)
@@ -70,32 +91,6 @@ module Guard
         def notify_start(paths, options)
           message = options[:message] || "Running: #{paths.join(' ')}"
           UI.info(message, :reset => true)
-        end
-
-        # Executes the testing commandon the tests 
-        # and returns the output.
-        #
-        # @param (see #run)
-        # @param (see #run)
-        #
-        def run_tests(paths, options)
-          if paths.length == 1
-            tests_path = paths.first
-            output = execute_command phpunit_command(tests_path, options)
-          else
-            create_tests_folder_for(paths) do |tests_folder|
-              output = execute_command phpunit_command(tests_folder, options)
-            end
-          end
-          output
-        end
-
-        # Prints the tests output to the terminal.
-        #
-        # @param [String] output the tests output
-        #
-        def print_output(output)
-          UI.info output
         end
 
         # Displays a notification about the tests results.
