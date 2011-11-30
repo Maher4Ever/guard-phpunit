@@ -26,6 +26,8 @@ module Guard
     # @param [Array<Guard::Watcher>] watchers the watchers in the Guard block
     # @param [Hash] options the options for the Guard
     # @option options [Boolean] :all_on_start run all tests on start
+    # @option options [Boolean] :all_after_pass run all tests after failed tests pass
+    # @option options [Boolean] :keep_failed remember failed tests or not
     # @option options [String] :cli The CLI arguments passed to phpunit
     # @option options [String] :tests_path the path where all tests exist
     #
