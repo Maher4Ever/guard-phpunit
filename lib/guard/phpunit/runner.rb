@@ -10,7 +10,7 @@ module Guard
     module Runner
       class << self
 
-        # The exittcode phpunit returns when the tests contain failures 
+        # The exittcode phpunit returns when the tests contain failures
         #
         PHPUNIT_FAILURES_EXITCODE = 1
 
@@ -22,14 +22,14 @@ module Guard
         # about the results.
         #
         # @param [Array<Strings>] path to the tests files.
-        # @param (see PHPUnit#initialize) 
+        # @param (see PHPUnit#initialize)
         # @return [Boolean] whether the tests were run successfully
         #
         def run(paths, options = {})
           paths = Array(paths)
-          
+
           return false if paths.empty?
-          
+
           unless phpunit_exists?
             UI.error('phpunit is not installed on your machine.', :reset => true)
             return false
@@ -49,7 +49,7 @@ module Guard
           system('which phpunit > /dev/null 2>&1')
         end
 
-        # Executes the testing command on the tests 
+        # Executes the testing command on the tests
         # and returns the status of this process.
         #
         # @param (see #run)
@@ -77,7 +77,7 @@ module Guard
           if $?.success? or tests_contain_failures? or tests_contain_errors?
             notify_results(output, options)
           else
-            notify_failure(options) 
+            notify_failure(options)
           end
 
           $?.success?
@@ -112,7 +112,7 @@ module Guard
           return if options[:notification] == false
           Notifier.notify('Failed! Check the console', :title => 'PHPUnit results', :image => :failed)
         end
-        
+
         # Checks the exitstatus of the phpunit command
         # for a sign of failures in the tests.
         #
@@ -146,7 +146,7 @@ module Guard
           end
         end
 
-        # Creates symbolic links inside the folder pointing 
+        # Creates symbolic links inside the folder pointing
         # back to the paths.
         #
         # @see #create_tests_folder_for
@@ -162,11 +162,11 @@ module Guard
         end
 
         # Generates the phpunit command for the tests paths.
-        # 
+        #
         # @param (see #run)
         # @param (see #run)
         # @see #run_tests
-        # 
+        #
         def phpunit_command(path, options)
           formatter_path = File.join( File.dirname(__FILE__), 'formatters', 'PHPUnit-Progress')
 

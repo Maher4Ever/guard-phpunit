@@ -22,7 +22,7 @@ describe Guard::PHPUnit::Notifier do
         subject.notify_results(
           :tests  => 10, :failures => 0,
           :errors => 0, :pending  => 0,
-          :duration => 5    
+          :duration => 5
         )
       end
     end
@@ -36,7 +36,7 @@ describe Guard::PHPUnit::Notifier do
         subject.notify_results(
           :tests  => 10, :failures => 3,
           :errors => 4, :pending  => 0,
-          :duration => 6    
+          :duration => 6
         )
       end
     end

@@ -3,7 +3,7 @@ require 'guard/guard'
 
 module Guard
 
-  # The PHPUnit guard gets notified about system 
+  # The PHPUnit guard gets notified about system
   # events.
   #
   class PHPUnit < Guard
@@ -91,7 +91,7 @@ module Guard
       if tests_passed
         @failed_paths -= paths
       else
-        @failed_paths += paths 
+        @failed_paths += paths
       end
     end
 

@@ -10,11 +10,11 @@ describe Guard::PHPUnit::Runner do
     before do
       FileUtils.stub(:ln_s)
       FileUtils.stub(:mkdir_p)
-      
+
       subject.stub(:execute_command)
       subject.stub(:phpunit_exists?).and_return(true)
       notifier.stub(:notify_results)
-      
+
       system("`exit 0`") # prime the $? variable
     end
 
@@ -54,10 +54,10 @@ describe Guard::PHPUnit::Runner do
       it 'prints the tests output to the console' do
           output = load_phpunit_output('passing')
           subject.stub(:notify_start)
-          subject.stub(:execute_command).and_return(output) 
-          
+          subject.stub(:execute_command).and_return(output)
+
           ui.should_receive(:info).with(output)
-          
+
           subject.run( ['tests'] )
       end
 
@@ -65,7 +65,7 @@ describe Guard::PHPUnit::Runner do
         it 'parses the tests output' do
           output = load_phpunit_output('passing')
           subject.stub(:execute_command).and_return(output)
-          
+
           formatter.should_receive(:parse_output).with(output)
 
           subject.run( ['tests'] )

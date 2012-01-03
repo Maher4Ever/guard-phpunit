@@ -114,13 +114,13 @@ describe Guard::PHPUnit do
     it 'throws :task_has_failed when an error occurs' do
       runner.should_receive(:run).with(['tests/firstTest.php', 'tests/secondTest.php'], anything).and_return(false)
       expect { subject.run_on_change ['tests/firstTest.php', 'tests/secondTest.php'] }.to throw_symbol :task_has_failed
-    end 
+    end
 
     it 'passes the options to the runner' do
       runner.should_receive(:run).with(anything, hash_including(defaults)).and_return(true)
       subject.run_on_change ['tests/firstTest.php', 'tests/secondTest.php']
     end
-    
+
     context 'when tests fail' do
       before do
         runner.stub(:run).and_return(false)
@@ -163,14 +163,14 @@ describe Guard::PHPUnit do
           expect { subject.run_on_change ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
           subject.run_on_change ['tests/firstTest.php']
         end
-        
+
         it 'calls #run_all (2)' do
           expect { subject.run_all }.to throw_symbol :task_has_failed
           subject.should_receive(:run_all)
           subject.run_on_change ['tests/firstTest.php']
         end
       end
-      
+
       context 'with the :all_after_pass option set to false' do
         subject { Guard::PHPUnit.new(nil, :all_after_pass => false) }
 
