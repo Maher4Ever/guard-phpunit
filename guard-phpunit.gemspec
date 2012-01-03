@@ -14,13 +14,13 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = '>= 1.3.6'
   s.rubyforge_project = 'guard-phpunit'
 
-  s.add_runtime_dependency 'guard', '~> 0.8.8'
+  s.add_runtime_dependency 'guard', '~> 0.10.0'
 
-  s.add_development_dependency 'bundler',     '~> 1.0'
-  s.add_development_dependency 'rspec',       '~> 2.7'
-  s.add_development_dependency 'guard-rspec', '~> 0.5'
-  s.add_development_dependency 'yard',        '~> 0.7'
-  s.add_development_dependency 'redcarpet',   '~> 1.17'
+  s.add_development_dependency 'bundler',     '~> 1.0.21'
+  s.add_development_dependency 'rspec',       '~> 2.7.0'
+  s.add_development_dependency 'guard-rspec', '~> 0.6.0'
+  s.add_development_dependency 'yard',        '~> 0.7.4'
+  s.add_development_dependency 'redcarpet',   '~> 2.0.0'
 
   s.files         = `git ls-files -- lib/*`.split("\n") + Dir.glob('{lib}/**/PHPUnit/**/*') + %w[LICENSE README.md]
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
