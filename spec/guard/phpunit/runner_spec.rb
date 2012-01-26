@@ -156,12 +156,12 @@ describe Guard::PHPUnit::Runner do
 
       it 'creates a tests folder (tmpdir)' do
         subject.should_receive(:create_tests_folder_for).with(instance_of(Array))
-        subject.run( ['spec/fixtures/sampleTest.php', 'spec/fixtures/fullTest.php'] )
+        subject.run( ['spec/fixtures/sampleTest.php', 'spec/fixtures/emptyTest.php'] )
       end
 
       it 'symlinks passed paths to the tests folder' do
         subject.should_receive(:symlink_paths_to_tests_folder).with(anything(), anything())
-        subject.run( ['spec/fixtures/sampleTest.php', 'spec/fixtures/fullTest.php'] )
+        subject.run( ['spec/fixtures/sampleTest.php', 'spec/fixtures/emptyTest.php'] )
       end
     end
   end
