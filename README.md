@@ -1,4 +1,4 @@
-Guard::PHPUnit [![Build Status](https://secure.travis-ci.org/Maher4Ever/guard-phpunit.png)](http://travis-ci.org/Maher4Ever/guard-phpunit)
+Guard::PHPUnit [![Build Status](https://secure.travis-ci.org/Maher4Ever/guard-phpunit.png)](http://travis-ci.org/Maher4Ever/guard-phpunit) [![Dependency Status](https://gemnasium.com/Maher4Ever/guard-phpunit.png?branch=master)](https://gemnasium.com/Maher4Ever/guard-phpunit)
 ==============
 
 PHPUnit guard allows to automatically & intelligently launch tests when files
