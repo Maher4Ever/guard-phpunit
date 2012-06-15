@@ -6,18 +6,19 @@ are modified. It helps with integrating test-driven development (TDD) into
 your development process: Just launch guard-phpunit before you start working
 and it will notify you about the status of your tests!
 
-*Note*: Although guard-phpunit should work with any PHP version PHPUnit supports,
-it has only been tested on PHP 5.3.8 and 5.4.4.
+*Note*: Although guard-phpunit should work with any [PHP][7] version [PHPUnit][6] supports,
+it has only been tested on [PHP][7] 5.3.8 and 5.4.4.
 
 Install
 -------
-Please be sure to have [Ruby][1] running on your machine.
-The latest versions of Ruby come with a packages-manger called Gem. Gem can be used to
-install various packages, including PHPUnit guard.
 
-Before you continue, also make sure you have the [Guard][2] gem installed
+Please be sure to have [PHP][7], [PHPUnit][6] and [Ruby][1] installed on your machine before
+you proceed with the installation.
 
-To install the PHPUnit gem, run the following command in the terminal:
+The latest versions of [Ruby][1] come with a packages-manager called `gem`. `gem` can be used to
+install various packages, including guard-phpunit.
+
+To install guard-phpunit, run the following command in the terminal:
 
 ```shell
 $ gem install guard-phpunit
@@ -31,7 +32,7 @@ Please read the [Guard usage documentation][3].
 Guardfile
 ---------
 
-Guard-phpunit can be used with any kind of PHP projects that uses PHPUnit as
+Guard-phpunit can be used with any kind of [PHP][7] projects that uses PHPUnit as
 its testing framwork. Please read the [Guard documentation][3] for more information
 about the Guardfile DSL.
 
@@ -98,8 +99,8 @@ Author
 [Maher Sallam](https://github.com/Maher4Ever)
 
 [1]:http://ruby-lang.org
-[2]:https://github.com/guard/guard
 [3]:https://github.com/guard/guard#readme
 [4]:http://www.phpunit.de/manual/current/en/
 [5]:https://github.com/sebastianbergmann/php-object-freezer/
 [6]:http://www.phpunit.de
+[7]:http://php.net
