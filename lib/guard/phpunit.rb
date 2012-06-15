@@ -68,7 +68,7 @@ module Guard
     # @param [Array<String>] paths to the changed tests
     # @raise (see #start)
     #
-    def run_on_change(paths)
+    def run_on_changes(paths)
       paths = Inspector.clean(paths + @failed_paths)
       success = Runner.run(paths, options)
 

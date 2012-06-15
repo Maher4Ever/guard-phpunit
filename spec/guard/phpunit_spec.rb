@@ -95,7 +95,7 @@ describe Guard::PHPUnit do
     end
   end
 
-  describe '#run_on_change' do
+  describe '#run_on_changes' do
     before do
       inspector.stub(:clean).and_return { |paths| paths }
     end
@@ -103,22 +103,22 @@ describe Guard::PHPUnit do
     it 'cleans the changed paths before running the tests' do
       runner.stub(:run).and_return(true)
       inspector.should_receive(:clean).with(['tests/firstTest.php', 'tests/secondTest.php'])
-      subject.run_on_change ['tests/firstTest.php', 'tests/secondTest.php']
+      subject.run_on_changes ['tests/firstTest.php', 'tests/secondTest.php']
     end
 
     it 'runs the changed tests' do
       runner.should_receive(:run).with(['tests/firstTest.php', 'tests/secondTest.php'], anything).and_return(true)
-      subject.run_on_change ['tests/firstTest.php', 'tests/secondTest.php']
+      subject.run_on_changes ['tests/firstTest.php', 'tests/secondTest.php']
     end
 
     it 'throws :task_has_failed when an error occurs' do
       runner.should_receive(:run).with(['tests/firstTest.php', 'tests/secondTest.php'], anything).and_return(false)
-      expect { subject.run_on_change ['tests/firstTest.php', 'tests/secondTest.php'] }.to throw_symbol :task_has_failed
+      expect { subject.run_on_changes ['tests/firstTest.php', 'tests/secondTest.php'] }.to throw_symbol :task_has_failed
     end
 
     it 'passes the options to the runner' do
       runner.should_receive(:run).with(anything, hash_including(defaults)).and_return(true)
-      subject.run_on_change ['tests/firstTest.php', 'tests/secondTest.php']
+      subject.run_on_changes ['tests/firstTest.php', 'tests/secondTest.php']
     end
 
     context 'when tests fail' do
@@ -129,12 +129,12 @@ describe Guard::PHPUnit do
 
       context 'with the :keep_failed option set to true' do
         it 'runs the next changed files plus the failed tests' do
-          expect { subject.run_on_change ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
+          expect { subject.run_on_changes ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
           runner.should_receive(:run).with(
             ['tests/secondTest.php', 'tests/firstTest.php'], anything
           ).and_return(true)
 
-          subject.run_on_change ['tests/secondTest.php']
+          subject.run_on_changes ['tests/secondTest.php']
         end
       end
 
@@ -142,12 +142,12 @@ describe Guard::PHPUnit do
         subject { Guard::PHPUnit.new(nil, :keep_failed => false) }
 
         it 'runs the next changed files normally without the failed tests' do
-          expect { subject.run_on_change ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
+          expect { subject.run_on_changes ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
           runner.should_receive(:run).with(
             ['tests/secondTest.php'], anything
           ).and_return(true)
 
-          subject.run_on_change ['tests/secondTest.php']
+          subject.run_on_changes ['tests/secondTest.php']
         end
       end
     end
@@ -160,14 +160,14 @@ describe Guard::PHPUnit do
       context 'with the :all_after_pass option set to true' do
         it 'calls #run_all' do
           subject.should_receive(:run_all)
-          expect { subject.run_on_change ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
-          subject.run_on_change ['tests/firstTest.php']
+          expect { subject.run_on_changes ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
+          subject.run_on_changes ['tests/firstTest.php']
         end
 
         it 'calls #run_all (2)' do
           expect { subject.run_all }.to throw_symbol :task_has_failed
           subject.should_receive(:run_all)
-          subject.run_on_change ['tests/firstTest.php']
+          subject.run_on_changes ['tests/firstTest.php']
         end
       end
 
@@ -176,14 +176,14 @@ describe Guard::PHPUnit do
 
         it 'does not call #run_all' do
           subject.should_not_receive(:run_all)
-          expect { subject.run_on_change ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
-          subject.run_on_change ['tests/firstTest.php']
+          expect { subject.run_on_changes ['tests/firstTest.php'] }.to throw_symbol :task_has_failed
+          subject.run_on_changes ['tests/firstTest.php']
         end
 
         it 'does not call #run_all (2)' do
           expect { subject.run_all }.to throw_symbol :task_has_failed
           subject.should_not_receive(:run_all)
-          subject.run_on_change ['tests/firstTest.php']
+          subject.run_on_changes ['tests/firstTest.php']
         end
       end
     end
