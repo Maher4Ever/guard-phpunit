@@ -1,3 +1,0 @@
-[submodule "lib/guard/phpunit/formatters/PHPUnit-Progress"]
-	path = lib/guard/phpunit/formatters/PHPUnit-Progress
-	url = git://github.com/Maher4Ever/guard-phpunit.git
