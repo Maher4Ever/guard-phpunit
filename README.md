@@ -1,14 +1,16 @@
 Guard::PHPUnit [![Build Status](https://secure.travis-ci.org/Maher4Ever/guard-phpunit.png)](http://travis-ci.org/Maher4Ever/guard-phpunit) [![Dependency Status](https://gemnasium.com/Maher4Ever/guard-phpunit.png?branch=master)](https://gemnasium.com/Maher4Ever/guard-phpunit)
 ==============
 
-PHPUnit guard allows to automatically & intelligently launch tests when files
-are modified.
+Guard-phpunit allows you to automatically run [PHPUnit][6] tests when sources
+are modified. It helps with integrating test-driven development (TDD) into
+your development process: Just launch guard-phpunit before you start working
+and it will notify you about the status of your tests!
 
-Tested on MRI Ruby (1.8.7, 1.9.2, 1.9.3), REE and Rubinius.
+*Note*: Although guard-phpunit should work with any PHP version PHPUnit supports,
+it has only been tested on PHP 5.3.8 and 5.4.4.
 
 Install
 -------
-
 Please be sure to have [Ruby][1] running on your machine.
 The latest versions of Ruby come with a packages-manger called Gem. Gem can be used to
 install various packages, including PHPUnit guard.
@@ -17,7 +19,9 @@ Before you continue, also make sure you have the [Guard][2] gem installed
 
 To install the PHPUnit gem, run the following command in the terminal:
 
-    gem install guard-phpunit
+```shell
+$ gem install guard-phpunit
+```
 
 Usage
 -----
@@ -27,11 +31,11 @@ Please read the [Guard usage documentation][3].
 Guardfile
 ---------
 
-Guard::PHPUnit can be used with any kind of PHP projects that uses PHPUnit as
+Guard-phpunit can be used with any kind of PHP projects that uses PHPUnit as
 its testing framwork. Please read the [Guard documentation][3] for more information
 about the Guardfile DSL.
 
-By default, Guard::PHPUnit will use the current working directory (pwd) to
+By default, guard-phpunit will use the current working directory (pwd) to
 search for tests and run them on start (if you enabled the `:all_on_start` option).
 
 ### Example PHP project
@@ -98,3 +102,4 @@ Author
 [3]:https://github.com/guard/guard#readme
 [4]:http://www.phpunit.de/manual/current/en/
 [5]:https://github.com/sebastianbergmann/php-object-freezer/
+[6]:http://www.phpunit.de
