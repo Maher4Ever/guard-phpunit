@@ -15,7 +15,7 @@ describe Guard::PHPUnit::Runner do
       subject.stub(:phpunit_exists?).and_return(true)
       notifier.stub(:notify_results)
 
-      system("exit 0") # prime the $? variable
+      $?.stub(:success?).and_return(true)
     end
 
     context 'when passed an empty paths list' do
@@ -80,7 +80,8 @@ describe Guard::PHPUnit::Runner do
         end
 
         it 'notifies about the tests output even when they contain failures' do
-          system("exit 1") # prime the $? variable
+          $?.stub(:success? => false, :exitstatus => 1)
+
           output = load_phpunit_output('failing')
           subject.stub(:execute_command).and_return(output)
           subject.should_receive(:notify_results).with(output, anything())
@@ -89,7 +90,8 @@ describe Guard::PHPUnit::Runner do
         end
 
         it 'notifies about the tests output even when they contain errors' do
-          system("exit 2") # prime the $? variable
+          $?.stub(:success? => false, :exitstatus => 2)
+
           output = load_phpunit_output('errors')
           subject.stub(:execute_command).and_return(output)
           subject.should_receive(:notify_results).with(output, anything())
@@ -106,7 +108,7 @@ describe Guard::PHPUnit::Runner do
 
       context 'when PHPUnit fails to execute' do
         before do
-          system("exit 255") # prime the $? variable
+          $?.stub(:success? => false, :exitstatus => 255)
           notifier.stub(:notify)
         end
 
