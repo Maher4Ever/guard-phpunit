@@ -31,8 +31,7 @@ describe Guard::PHPUnit::Runner do
       end
 
       it 'displays an error when phpunit is not installed' do
-        subject.unstub(:phpunit_exists?)
-        subject.stub(:system).and_return(false)
+        subject.stub(:phpunit_exists?).and_return(false)
         ui.should_receive(:error).with('phpunit is not installed on your machine.', anything)
 
         subject.run( ['tests'] )

@@ -1,4 +1,3 @@
-require 'rbconfig'
 require 'tmpdir'
 require 'fileutils'
 
@@ -47,13 +46,10 @@ module Guard
         # @return [Boolean] The status of phpunit
         #
         def phpunit_exists?
-          command = if RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/
-            'where phpunit > nul 2>&1'
-          else
-            'which phpunit > /dev/null 2>&1'
-          end
-
-          system(command)
+          `phpunit --version`
+          true
+        rescue Errno::ENOENT
+          false
         end
 
         # Executes the testing command on the tests
