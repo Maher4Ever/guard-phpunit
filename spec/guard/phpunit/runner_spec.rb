@@ -50,6 +50,14 @@ describe Guard::PHPUnit::Runner do
         subject.run( ['tests'] )
       end
 
+      it 'runs phpunit tests with provided command' do
+        formatter_path = @project_path.join('lib', 'guard', 'phpunit', 'formatters', 'PHPUnit-Progress')
+        subject.should_receive(:execute_command).with(
+          %r{^/usr/local/bin/phpunit --include-path #{formatter_path} --printer PHPUnit_Extensions_Progress_ResultPrinter .+$}
+        ).and_return(true)
+        subject.run( ['tests'] , {:command => '/usr/local/bin/phpunit'} )
+      end
+
       it 'prints the tests output to the console' do
           output = load_phpunit_output('passing')
           subject.stub(:notify_start)

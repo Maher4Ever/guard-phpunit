@@ -82,6 +82,10 @@ The following options can be passed to Guard::PHPUnit:
 :cli => '--colors'            # The options passed to the phpunit command
                               # when running the tests.
                               # default: nil
+
+:command => "./bin/phpunit"   # specify alternative phpunit location
+                              # that is not on the path.
+                              # Useful if running phpunit from composer
 ```
 
 Development
