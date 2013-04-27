@@ -77,13 +77,16 @@ module Guard
           # return false in case the system call fails with no status!
           return false if $?.nil?
 
-          if $?.success? or tests_contain_failures? or tests_contain_errors?
+          # capture success so that if notifications alter the status stored in $? we still return the correct value
+          success = $?.success?
+
+          if success or tests_contain_failures? or tests_contain_errors?
             notify_results(output, options)
           else
             notify_failure(options)
           end
 
-          $?.success?
+          success
         end
 
         # Displays the start testing notification.
